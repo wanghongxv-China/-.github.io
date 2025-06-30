@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>金牌园中学订货系统 - 增强同步版</title>
+    <title>星迹联盟订货系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <style>
@@ -55,7 +55,6 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
         }
         
         .school-name {
@@ -321,8 +320,716 @@
             background: var(--warning);
         }
         
-        /* 其余样式保持不变 */
-        /* ... */
+        /* 用户端样式 */
+        .user-view {
+            max-width: 680px;
+            width: 100%;
+            margin: 0 auto 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-hover);
+        }
+        
+        .card-header {
+            background: linear-gradient(to right, var(--primary), #2980b9);
+            color: white;
+            padding: 22px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .card-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .card-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            transition: all 0.3s;
+            background-color: #f9fafc;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15);
+            background-color: white;
+        }
+        
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 1em;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            text-align: center;
+            gap: 8px;
+        }
+        
+        .btn-block {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-success {
+            background: var(--secondary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.25);
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.25);
+        }
+        
+        .btn-warning:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(243, 156, 18, 0.3);
+        }
+        
+        .confirmation {
+            text-align: center;
+            padding: 50px 30px;
+        }
+        
+        .confirmation i {
+            font-size: 5rem;
+            color: var(--secondary);
+            margin-bottom: 25px;
+            animation: bounce 1s infinite alternate;
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        
+        .confirmation h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .confirmation p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .confirmation .order-id {
+            font-family: monospace;
+            background: #f5f7fa;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 15px 0;
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: bold;
+            border: 2px dashed var(--primary);
+        }
+        
+        /* 密钥输入界面 */
+        .key-view {
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        
+        .key-input-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+        
+        .key-input-container input {
+            flex: 1;
+        }
+        
+        /* 后台管理 */
+        .admin-view {
+            width: 100%;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .header h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-item {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .orders-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .orders-table th,
+        .orders-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .orders-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark);
+            position: sticky;
+            top: 0;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .orders-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .orders-table tbody tr:hover {
+            background: #f8fafc;
+        }
+        
+        .order-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-pending {
+            background: #fef9c3;
+            color: #ca8a04;
+        }
+        
+        .status-completed {
+            background: #dcfce7;
+            color: #15803d;
+        }
+        
+        .status-rejected {
+            background: #fee2e2;
+            color: #b21f1f;
+        }
+        
+        .status-waiting-reply {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin: 3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-complete {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-complete:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+        }
+        
+        .btn-reject {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .btn-reject:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+        
+        .btn-reply {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-reply:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        /* 视图切换 */
+        .view {
+            display: none;
+        }
+        
+        .view.active {
+            display: block;
+        }
+        
+        .admin-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .admin-card {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .admin-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .admin-card-header {
+            background: linear-gradient(to right, var(--purple), #8e44ad);
+            color: white;
+            padding: 18px 25px;
+            font-size: 1.3rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-card-body {
+            padding: 25px;
+        }
+        
+        .key-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .key-value {
+            font-family: monospace;
+            background: #f5f7fa;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+        
+        .key-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .key-action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .key-action-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* 回复弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            transform: translateY(0);
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.6rem;
+            color: var(--dark);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: transform 0.3s;
+            line-height: 1;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-btn:hover {
+            transform: rotate(90deg);
+            color: var(--danger);
+            background: rgba(0,0,0,0.05);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .top-banner {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+                text-align: center;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .orders-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .card-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .admin-card {
+                min-width: 100%;
+            }
+            
+            .key-input-container {
+                flex-direction: column;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 30px;
+        }
+        
+        .statistics {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        /* 自动同步样式 */
+        .auto-sync-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--secondary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .sync-status {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 8px 20px;
+            margin: 15px auto 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .status-connected {
+            color: var(--secondary);
+        }
+        
+        .status-disconnected {
+            color: var(--warning);
+        }
+        
+        .sync-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+        
+        .devices-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .device {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .device-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .sync-icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .sync-info {
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .sync-info h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-dark);
+        }
+        
+        .sync-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .feature-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
     </style>
 </head>
 <body>
@@ -422,117 +1129,418 @@
         </div>
     </div>
     
-    <!-- 顶部横幅 -->
-    <div class="top-banner">
-        <div class="school-name">
-            <i class="fas fa-school"></i>
-            <span>星迹订货系统-金牌园中学七年级</span>
-        </div>
-        <div class="contact-info">
-            <i class="fas fa-phone"></i> 客服电话：13555934580
-            <button class="access-key-btn" id="enter-admin-btn">
-                <i class="fas fa-key"></i> 管理员入口
-            </button>
-        </div>
-    </div>
-    
     <div class="container">
-        <!-- 用户界面内容 -->
-        <div style="background: white; border-radius: 16px; padding: 30px; box-shadow: var(--card-shadow);">
-            <h2 style="text-align: center; margin-bottom: 20px; color: var(--blue-dark);">
-                <i class="fas fa-shopping-cart"></i> 星迹订货系统
-            </h2>
+        <!-- 用户端 -->
+        <div id="user-view" class="view active">
+            <div class="top-banner">
+                <div class="school-name">
+                    <i class="fas fa-school"></i>
+                    <span>星迹联盟订货系统-金牌园中学七年级</span>
+                </div>
+                <div class="contact-info">
+                    <div class="sync-status status-connected">
+                        <i class="fas fa-circle"></i> 已连接 <span id="connected-devices-count">0</span> 台设备
+                    </div>
+                    <i class="fas fa-phone"></i> 客服电话：13555934580
+                    <button class="access-key-btn" id="enter-admin-btn">
+                        <i class="fas fa-key"></i> 管理员入口
+                    </button>
+                </div>
+            </div>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
-                <div>
-                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                        <i class="fas fa-plus-circle"></i> 提交新订单
-                    </h3>
-                    <form style="display: grid; gap: 15px;">
-                        <div>
-                            <label>产品名称</label>
-                            <input type="text" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px;">
-                        </div>
-                        <div>
-                            <label>预算范围 (元)</label>
-                            <input type="number" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px;">
-                        </div>
-                        <div>
-                            <label>班级</label>
-                            <select style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px;">
-                                <option>七年级1班</option>
-                                <option>七年级2班</option>
-                                <option>七年级3班</option>
-                                <option>七年级4班</option>
-                                <option>七年级5班</option>
-                                <option>七年级6班</option>
-                                <option>七年级7班</option>
-                                <option>七年级8班</option>
-                                <option>七年级9班</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>姓名</label>
-                            <input type="text" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px;">
-                        </div>
-                        <div>
-                            <label>联系电话</label>
-                            <input type="tel" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px;">
-                        </div>
-                        <button type="submit" style="background: var(--primary); color:white; padding:12px; border:none; border-radius:8px; cursor:pointer;">
-                            <i class="fas fa-paper-plane"></i> 提交订单
-                        </button>
-                    </form>
+            <div class="statistics">
+                <div class="stat-item">
+                    <div class="stat-value">128</div>
+                    <div class="stat-label">今日订单</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">完成率</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">待处理</div>
+                </div>
+            </div>
+            
+            <div class="user-view">
+                <div class="card" id="order-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-shopping-cart"></i> 产品订货单</h2>
+                        <p>请填写您的订货信息</p>
+                    </div>
+                    
+                    <div class="card-body">
+                        <form id="order-form">
+                            <div class="form-group">
+                                <label for="product"><i class="fas fa-box"></i> 产品名称</label>
+                                <input type="text" id="product" class="form-control" placeholder="请输入您需要的产品名称" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="budget"><i class="fas fa-money-bill-wave"></i> 预算范围 (元)</label>
+                                <input type="number" id="budget" class="form-control" placeholder="请输入您的预算金额" required min="0">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="class"><i class="fas fa-users"></i> 班级</label>
+                                <select id="class" class="form-control" required>
+                                    <option value="">请选择班级</option>
+                                    <option value="7-1">七年级1班</option>
+                                    <option value="7-2">七年级2班</option>
+                                    <option value="7-3">七年级3班</option>
+                                    <option value="7-4">七年级4班</option>
+                                    <option value="7-5">七年级5班</option>
+                                    <option value="7-6">七年级6班</option>
+                                    <option value="7-7">七年级7班</option>
+                                    <option value="7-8">七年级8班</option>
+                                    <option value="7-9">七年级9班</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="name"><i class="fas fa-user"></i> 姓名</label>
+                                <input type="text" id="name" class="form-control" placeholder="请输入您的姓名" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone"><i class="fas fa-phone"></i> 联系电话</label>
+                                <input type="tel" id="phone" class="form-control" placeholder="请输入您的联系电话" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-paper-plane"></i> 提交订货信息
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 
-                <div>
-                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                        <i class="fas fa-list"></i> 最近订单
-                    </h3>
-                    <div style="max-height: 350px; overflow-y: auto; padding-right: 10px;">
-                        <div style="background: #f8f9fa; padding:15px; border-radius:10px; margin-bottom:15px;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                                <strong>ORD-20230630-001</strong>
-                                <span style="background:#dcfce7; color:#15803d; padding:4px 10px; border-radius:20px; font-size:0.85rem;">已完成</span>
-                            </div>
-                            <p>产品: 数学练习册</p>
-                            <p>班级: 7-3班 · 张明 · ¥45.00</p>
+                <div class="card confirmation" id="confirmation-view" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>订货信息提交成功！</h3>
+                    <p>您的订货信息已成功提交，请等待学校后勤部处理。</p>
+                    <div class="order-id" id="order-id">GJY20240615001</div>
+                    <p>后勤老师将在1-3个工作日内与您联系确认订单细节。</p>
+                    <button class="btn btn-success" id="new-order-btn">
+                        <i class="fas fa-plus"></i> 提交新的订货信息
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 自动同步展示区域 -->
+    <div style="margin-top: 30px; background: #f0f7ff; padding:20px; border-radius:12px;">
+        <h3 style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+            <i class="fas fa-sync-alt"></i> 同步状态说明
+        </h3>
+        <p>系统使用点对点技术实现设备间实时同步：</p>
+        <ul style="margin:15px 0 15px 25px;">
+            <li>所有设备通过同步服务器建立直接连接</li>
+            <li>数据变化会在100毫秒内同步到所有设备</li>
+            <li>支持离线操作，恢复连接后自动同步</li>
+        </ul>
+        <p>当前同步服务器: <strong id="current-server-display">peerjs-wss.herokuapp.com:443</strong></p>
+    </div>
+</div>   
+        <!-- 密钥输入界面 -->
+        <div id="key-view" class="view">
+            <div class="key-view">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-key"></i> 安全密钥验证</h2>
+                        <p>请输入管理员密钥进入后台</p>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="admin-key"><i class="fas fa-lock"></i> 管理员密钥</label>
+                            <input type="password" id="admin-key" class="form-control" placeholder="请输入管理员密钥" required>
                         </div>
                         
-                        <div style="background: #f8f9fa; padding:15px; border-radius:10px; margin-bottom:15px;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                                <strong>ORD-20230630-002</strong>
-                                <span style="background:#fef9c3; color:#ca8a04; padding:4px 10px; border-radius:20px; font-size:0.85rem;">处理中</span>
-                            </div>
-                            <p>产品: 英语词典</p>
-                            <p>班级: 7-1班 · 李华 · ¥68.00</p>
-                        </div>
-                        
-                        <div style="background: #f8f9fa; padding:15px; border-radius:10px; margin-bottom:15px;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                                <strong>ORD-20230630-003</strong>
-                                <span style="background:#fee2e2; color:#b91c1c; padding:4px 10px; border-radius:20px; font-size:0.85rem;">已取消</span>
-                            </div>
-                            <p>产品: 物理实验套装</p>
-                            <p>班级: 7-5班 · 王芳 · ¥120.00</p>
+                        <div class="key-input-container">
+                            <button class="btn btn-primary" id="key-submit-btn">
+                                <i class="fas fa-unlock"></i> 验证密钥
+                            </button>
+                            <button class="btn btn-warning" id="key-cancel-btn">
+                                <i class="fas fa-times"></i> 返回
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <div style="margin-top: 30px; background: #f0f7ff; padding:20px; border-radius:12px;">
-                <h3 style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-                    <i class="fas fa-sync-alt"></i> 同步状态说明
-                </h3>
-                <p>系统使用点对点技术实现设备间实时同步：</p>
-                <ul style="margin:15px 0 15px 25px;">
-                    <li>所有设备通过同步服务器建立直接连接</li>
-                    <li>数据变化会在100毫秒内同步到所有设备</li>
-                    <li>支持离线操作，恢复连接后自动同步</li>
-                </ul>
-                <p>当前同步服务器: <strong id="current-server-display">peerjs-wss.herokuapp.com:443</strong></p>
+        </div>
+        
+        <!-- 后台管理 -->
+        <div id="admin-view" class="view">
+            <div class="admin-view">
+                <div class="header">
+                    <h2><i class="fas fa-tachometer-alt"></i> 金牌园中学订货系统后台</h2>
+                    <div>
+                        <div class="sync-status status-connected">
+                            <i class="fas fa-circle"></i> 已连接 <span id="admin-connected-devices-count">0</span> 台设备
+                        </div>
+                        <button id="admin-logout" class="btn btn-primary">
+                            <i class="fas fa-sign-out-alt"></i> 退出后台
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filters">
+                    <div class="filter-item">
+                        <label><i class="fas fa-users"></i> 班级筛选</label>
+                        <select id="filter-class" class="form-control">
+                            <option value="">所有班级</option>
+                            <option value="7-1">七年级1班</option>
+                            <option value="7-2">七年级2班</option>
+                            <option value="7-3">七年级3班</option>
+                            <option value="7-4">七年级4班</option>
+                            <option value="7-5">七年级5班</option>
+                            <option value="7-6">七年级6班</option>
+                            <option value="7-7">七年级7班</option>
+                            <option value="7-8">七年级8班</option>
+                            <option value="7-9">七年级9班</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label><i class="fas fa-tag"></i> 状态筛选</label>
+                        <select id="filter-status" class="form-control">
+                            <option value="">所有状态</option>
+                            <option value="pending">待处理</option>
+                            <option value="completed">已完成</option>
+                            <option value="rejected">已打回</option>
+                            <option value="waiting-reply">等待回复</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label><i class="fas fa-search"></i> 姓名搜索</label>
+                        <input type="text" id="filter-name" class="form-control" placeholder="输入学生姓名">
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label>&nbsp;</label>
+                        <button id="filter-btn" class="btn btn-primary">
+                            <i class="fas fa-filter"></i> 筛选订单
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2><i class="fas fa-list"></i> 订货订单列表</h2>
+                        <div style="color: white; font-weight: 500;">
+                            <i class="fas fa-clipboard-list"></i> 共 <span id="order-count">6</span> 个订单
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <table class="orders-table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-hashtag"></i> 订单号</th>
+                                    <th><i class="fas fa-box"></i> 产品名称</th>
+                                    <th><i class="fas fa-money-bill-wave"></i> 预算 (元)</th>
+                                    <th><i class="fas fa-users"></i> 班级</th>
+                                    <th><i class="fas fa-user"></i> 姓名</th>
+                                    <th><i class="fas fa-phone"></i> 电话</th>
+                                    <th><i class="fas fa-calendar-alt"></i> 提交时间</th>
+                                    <th><i class="fas fa-tag"></i> 状态</th>
+                                    <th><i class="fas fa-cog"></i> 操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-body">
+                                <tr>
+                                    <td>GJY20240615001</td>
+                                    <td>数学练习册</td>
+                                    <td>45.00</td>
+                                    <td>7-3</td>
+                                    <td>张明</td>
+                                    <td>138****1234</td>
+                                    <td>2024-06-15 09:25</td>
+                                    <td><span class="order-status status-pending">待处理</span></td>
+                                    <td>
+                                        <button class="action-btn btn-complete"><i class="fas fa-check"></i> 完成</button>
+                                        <button class="action-btn btn-reject"><i class="fas fa-undo"></i> 打回</button>
+                                        <button class="action-btn btn-reply"><i class="fas fa-reply"></i> 回复</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>GJY20240615002</td>
+                                    <td>英语词典</td>
+                                    <td>68.00</td>
+                                    <td>7-1</td>
+                                    <td>李华</td>
+                                    <td>139****5678</td>
+                                    <td>2024-06-15 10:15</td>
+                                    <td><span class="order-status status-completed">已完成</span></td>
+                                    <td>
+                                        <button class="action-btn btn-delete"><i class="fas fa-trash"></i> 删除</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>GJY20240615003</td>
+                                    <td>物理实验套装</td>
+                                    <td>120.00</td>
+                                    <td>7-5</td>
+                                    <td>王芳</td>
+                                    <td>137****9012</td>
+                                    <td>2024-06-15 11:30</td>
+                                    <td><span class="order-status status-rejected">已打回</span></td>
+                                    <td>
+                                        <button class="action-btn btn-complete"><i class="fas fa-check"></i> 完成</button>
+                                        <button class="action-btn btn-reply"><i class="fas fa-reply"></i> 回复</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>GJY20240615004</td>
+                                    <td>美术用品套装</td>
+                                    <td>85.00</td>
+                                    <td>7-2</td>
+                                    <td>赵雨</td>
+                                    <td>135****3456</td>
+                                    <td>2024-06-15 13:45</td>
+                                    <td><span class="order-status status-waiting-reply">等待回复</span></td>
+                                    <td>
+                                        <button class="action-btn btn-complete"><i class="fas fa-check"></i> 完成</button>
+                                        <button class="action-btn btn-reply"><i class="fas fa-reply"></i> 回复</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="admin-panel">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <i class="fas fa-key"></i> 安全密钥管理
+                        </div>
+                        <div class="admin-card-body">
+                            <div class="form-group">
+                                <label>当前客户端密钥</label>
+                                <div class="key-item">
+                                    <span class="key-value" id="current-client-key">123456</span>
+                                    <div class="key-actions">
+                                        <button class="key-action-btn btn-primary" id="copy-client-key">
+                                            <i class="fas fa-copy"></i> 复制
+                                        </button>
+                                        <button class="key-action-btn btn-warning" id="regenerate-client-key">
+                                            <i class="fas fa-sync-alt"></i> 重新生成
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>当前管理员密钥</label>
+                                <div class="key-item">
+                                    <span class="key-value" id="current-admin-key">admin123</span>
+                                    <div class="key-actions">
+                                        <button class="key-action-btn btn-primary" id="copy-admin-key">
+                                            <i class="fas fa-copy"></i> 复制
+                                        </button>
+                                        <button class="key-action-btn btn-warning" id="regenerate-admin-key">
+                                            <i class="fas fa-sync-alt"></i> 重新生成
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p style="margin-top: 20px; color: #666; font-size: 0.9rem;">
+                                <i class="fas fa-info-circle"></i> 客户端密钥用于学生进入系统，管理员密钥用于进入后台
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <i class="fas fa-tools"></i> 系统管理
+                        </div>
+                        <div class="admin-card-body">
+                            <div class="form-group">
+                                <label>系统状态</label>
+                                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                    <button class="btn btn-success" style="flex:1;">
+                                        <i class="fas fa-check-circle"></i> 正常运行
+                                    </button>
+                                    <button class="btn btn-warning" style="flex:1;">
+                                        <i class="fas fa-tools"></i> 维护模式
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>数据备份</label>
+                                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                    <button class="btn btn-primary" style="flex:1;">
+                                        <i class="fas fa-download"></i> 备份数据
+                                    </button>
+                                    <button class="btn btn-purple" style="flex:1;">
+                                        <i class="fas fa-upload"></i> 恢复数据
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>订单统计</label>
+                                <div style="background: #f5f7fa; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                        <span><i class="fas fa-calendar-day"></i> 今日订单:</span>
+                                        <strong>12</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                        <span><i class="fas fa-calendar-week"></i> 本周订单:</span>
+                                        <strong>58</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span><i class="fas fa-clock"></i> 待处理订单:</span>
+                                        <strong>8</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        
+        <!-- 回复弹窗 -->
+        <div id="reply-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-reply"></i> 回复订单</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-info-circle"></i> 订单信息</label>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <p><strong>订单号:</strong> GJY20240615004</p>
+                        <p><strong>产品:</strong> 美术用品套装</p>
+                        <p><strong>学生:</strong> 赵雨 (7-2班)</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reply-content"><i class="fas fa-comment-dots"></i> 回复内容</label>
+                    <textarea id="reply-content" class="form-control" rows="5" placeholder="请输入回复内容..." style="min-height: 150px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-cogs"></i> 操作</label>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button class="btn btn-primary" style="flex:1;">
+                            <i class="fas fa-paper-plane"></i> 发送回复
+                        </button>
+                        <button class="btn btn-warning" style="flex:1;" id="mark-waiting-btn">
+                            <i class="fas fa-comments"></i> 标记为等待回复
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2024 金牌园中学七年级订货系统 | 技术支持电话：13555934580</p>
+            <p>完全自动同步无服务器解决方案 | 基于WebRTC和P2P技术</p>
+        </footer>
     </div>
 
     <script>
@@ -545,6 +1553,8 @@
             const logEntries = document.getElementById('log-entries');
             const serverPanel = document.getElementById('server-panel');
             const currentServerDisplay = document.getElementById('current-server-display');
+            const connectedDevicesCount = document.getElementById('connected-devices-count');
+            const adminConnectedDevicesCount = document.getElementById('admin-connected-devices-count');
             
             // 日志级别
             let logLevel = 'all';
@@ -585,6 +1595,54 @@
             let peer = null;
             let connections = [];
             
+            // 存储订单数据
+            let orders = [
+                {
+                    id: 'GJY20240615001',
+                    product: '数学练习册',
+                    budget: 45.00,
+                    class: '7-3',
+                    name: '张明',
+                    phone: '138****1234',
+                    date: '2024-06-15 09:25',
+                    status: 'pending'
+                },
+                {
+                    id: 'GJY20240615002',
+                    product: '英语词典',
+                    budget: 68.00,
+                    class: '7-1',
+                    name: '李华',
+                    phone: '139****5678',
+                    date: '2024-06-15 10:15',
+                    status: 'completed'
+                },
+                {
+                    id: 'GJY20240615003',
+                    product: '物理实验套装',
+                    budget: 120.00,
+                    class: '7-5',
+                    name: '王芳',
+                    phone: '137****9012',
+                    date: '2024-06-15 11:30',
+                    status: 'rejected'
+                },
+                {
+                    id: 'GJY20240615004',
+                    product: '美术用品套装',
+                    budget: 85.00,
+                    class: '7-2',
+                    name: '赵雨',
+                    phone: '135****3456',
+                    date: '2024-06-15 13:45',
+                    status: 'waiting-reply'
+                }
+            ];
+            
+            // 密钥设置
+            let clientKey = '123456';
+            let adminKey = 'admin123';
+            
             // 添加日志条目
             function addLogEntry(message, type = 'info') {
                 const now = new Date();
@@ -609,7 +1667,10 @@
             
             // 更新设备计数
             function updateDeviceCount() {
-                deviceCount.textContent = `${connections.length}台设备`;
+                const count = connections.length;
+                deviceCount.textContent = `${count}台设备`;
+                connectedDevicesCount.textContent = count;
+                adminConnectedDevicesCount.textContent = count;
             }
             
             // 测试服务器连接
@@ -769,26 +1830,269 @@
                 });
             });
             
-            // 模拟同步活动
-            setInterval(() => {
-                if (connections.length > 0 && peer && peer.open) {
-                    addLogEntry('同步心跳: 连接正常', 'info');
-                }
-            }, 30000);
+            // 订单表单提交
+            document.getElementById('order-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 获取表单数据
+                const product = document.getElementById('product').value;
+                const budget = document.getElementById('budget').value;
+                const className = document.getElementById('class').value;
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
+                
+                // 生成随机订单号
+                const orderId = 'GJY' + new Date().getTime().toString().substr(5);
+                
+                // 添加到订单列表
+                orders.push({
+                    id: orderId,
+                    product: product,
+                    budget: parseFloat(budget),
+                    class: className,
+                    name: name,
+                    phone: phone,
+                    date: new Date().toLocaleString(),
+                    status: 'pending'
+                });
+                
+                // 更新订单列表
+                updateOrderList();
+                
+                // 隐藏表单，显示确认信息
+                document.querySelector('.card-body').style.display = 'none';
+                document.getElementById('confirmation-view').style.display = 'block';
+                document.getElementById('order-id').textContent = orderId;
+                
+                // 模拟同步
+                addLogEntry(`新订单提交: ${orderId}`, 'success');
+            });
             
-            // 模拟网络错误测试
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'e' && e.ctrlKey) {
-                    addLogEntry('模拟网络错误: network', 'error');
-                    updateSyncStatus('同步连接失败', 'sync-error');
-                    
-                    if (peer) {
-                        peer.destroy();
-                    }
-                    
-                    setTimeout(initPeerConnection, 5000);
+            // 提交新订单
+            document.getElementById('new-order-btn').addEventListener('click', function() {
+                document.querySelector('.card-body').style.display = 'block';
+                document.getElementById('confirmation-view').style.display = 'none';
+                document.getElementById('order-form').reset();
+            });
+            
+            // 进入管理员界面按钮
+            document.getElementById('enter-admin-btn').addEventListener('click', function() {
+                document.getElementById('user-view').classList.remove('active');
+                document.getElementById('key-view').classList.add('active');
+            });
+            
+            // 密钥提交
+            document.getElementById('key-submit-btn').addEventListener('click', function() {
+                const inputKey = document.getElementById('admin-key').value;
+                
+                if (inputKey === adminKey) {
+                    document.getElementById('key-view').classList.remove('active');
+                    document.getElementById('admin-view').classList.add('active');
+                    updateOrderList();
+                } else {
+                    alert('管理员密钥错误，请重新输入！');
                 }
             });
+            
+            // 密钥取消
+            document.getElementById('key-cancel-btn').addEventListener('click', function() {
+                document.getElementById('key-view').classList.remove('active');
+                document.getElementById('user-view').classList.add('active');
+            });
+            
+            // 管理员退出
+            document.getElementById('admin-logout').addEventListener('click', function() {
+                document.getElementById('admin-view').classList.remove('active');
+                document.getElementById('user-view').classList.add('active');
+            });
+            
+            // 筛选订单
+            document.getElementById('filter-btn').addEventListener('click', function() {
+                updateOrderList();
+            });
+            
+            // 更新订单列表
+            function updateOrderList() {
+                const tbody = document.getElementById('orders-body');
+                tbody.innerHTML = '';
+                
+                const classFilter = document.getElementById('filter-class').value;
+                const statusFilter = document.getElementById('filter-status').value;
+                const nameFilter = document.getElementById('filter-name').value.toLowerCase();
+                
+                let filteredOrders = orders.filter(order => {
+                    return (classFilter === '' || order.class === classFilter) &&
+                           (statusFilter === '' || order.status === statusFilter) &&
+                           (nameFilter === '' || order.name.toLowerCase().includes(nameFilter));
+                });
+                
+                filteredOrders.forEach(order => {
+                    const row = document.createElement('tr');
+                    
+                    // 状态显示
+                    let statusClass = '';
+                    let statusText = '';
+                    
+                    switch(order.status) {
+                        case 'pending':
+                            statusClass = 'status-pending';
+                            statusText = '待处理';
+                            break;
+                        case 'completed':
+                            statusClass = 'status-completed';
+                            statusText = '已完成';
+                            break;
+                        case 'rejected':
+                            statusClass = 'status-rejected';
+                            statusText = '已打回';
+                            break;
+                        case 'waiting-reply':
+                            statusClass = 'status-waiting-reply';
+                            statusText = '等待回复';
+                            break;
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${order.id}</td>
+                        <td>${order.product}</td>
+                        <td>${order.budget.toFixed(2)}</td>
+                        <td>${order.class}</td>
+                        <td>${order.name}</td>
+                        <td>${order.phone}</td>
+                        <td>${order.date}</td>
+                        <td><span class="order-status ${statusClass}">${statusText}</span></td>
+                        <td>
+                            ${order.status !== 'completed' ? '<button class="action-btn btn-complete"><i class="fas fa-check"></i> 完成</button>' : ''}
+                            ${order.status !== 'rejected' && order.status !== 'completed' ? '<button class="action-btn btn-reject"><i class="fas fa-undo"></i> 打回</button>' : ''}
+                            <button class="action-btn btn-reply"><i class="fas fa-reply"></i> 回复</button>
+                            ${order.status === 'completed' ? '<button class="action-btn btn-delete"><i class="fas fa-trash"></i> 删除</button>' : ''}
+                        </td>
+                    `;
+                    
+                    tbody.appendChild(row);
+                });
+                
+                // 更新订单数量
+                document.getElementById('order-count').textContent = filteredOrders.length;
+                
+                // 添加事件监听器
+                addOrderEventListeners();
+            }
+            
+            // 添加订单操作事件监听器
+            function addOrderEventListeners() {
+                document.querySelectorAll('.btn-complete').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const row = this.closest('tr');
+                        const orderId = row.cells[0].textContent;
+                        const order = orders.find(o => o.id === orderId);
+                        
+                        if (order) {
+                            order.status = 'completed';
+                            updateOrderList();
+                            addLogEntry(`订单 ${orderId} 状态更新为"已完成"`, 'success');
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.btn-reject').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (confirm('确定要打回此订单吗？')) {
+                            const row = this.closest('tr');
+                            const orderId = row.cells[0].textContent;
+                            const order = orders.find(o => o.id === orderId);
+                            
+                            if (order) {
+                                order.status = 'rejected';
+                                updateOrderList();
+                                addLogEntry(`订单 ${orderId} 已打回`, 'warning');
+                            }
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.btn-reply').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const row = this.closest('tr');
+                        const orderId = row.cells[0].textContent;
+                        const product = row.cells[1].textContent;
+                        const student = row.cells[4].textContent;
+                        const className = row.cells[3].textContent;
+                        
+                        // 更新弹窗内容
+                        const infoDiv = document.querySelector('#reply-modal .modal-content div:nth-child(2)');
+                        infoDiv.innerHTML = `
+                            <p><strong>订单号:</strong> ${orderId}</p>
+                            <p><strong>产品:</strong> ${product}</p>
+                            <p><strong>学生:</strong> ${student} (${className})</p>
+                        `;
+                        
+                        document.getElementById('reply-modal').style.display = 'flex';
+                    });
+                });
+                
+                document.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (confirm('确定要删除此订单吗？')) {
+                            const row = this.closest('tr');
+                            const orderId = row.cells[0].textContent;
+                            orders = orders.filter(o => o.id !== orderId);
+                            updateOrderList();
+                            addLogEntry(`订单 ${orderId} 已删除`, 'warning');
+                        }
+                    });
+                });
+            }
+            
+            // 密钥管理
+            document.getElementById('copy-client-key').addEventListener('click', function() {
+                navigator.clipboard.writeText(clientKey);
+                alert('客户端密钥已复制到剪贴板');
+            });
+            
+            document.getElementById('copy-admin-key').addEventListener('click', function() {
+                navigator.clipboard.writeText(adminKey);
+                alert('管理员密钥已复制到剪贴板');
+            });
+            
+            document.getElementById('regenerate-client-key').addEventListener('click', function() {
+                clientKey = Math.random().toString(36).substr(2, 8).toUpperCase();
+                document.getElementById('current-client-key').textContent = clientKey;
+                alert('客户端密钥已重新生成');
+            });
+            
+            document.getElementById('regenerate-admin-key').addEventListener('click', function() {
+                adminKey = Math.random().toString(36).substr(2, 10);
+                document.getElementById('current-admin-key').textContent = adminKey;
+                alert('管理员密钥已重新生成');
+            });
+            
+            // 回复弹窗关闭
+            document.querySelector('.close-btn').addEventListener('click', function() {
+                document.getElementById('reply-modal').style.display = 'none';
+            });
+            
+            // 标记为等待回复
+            document.getElementById('mark-waiting-btn').addEventListener('click', function() {
+                alert('订单已标记为"等待回复"状态');
+                document.getElementById('reply-modal').style.display = 'none';
+            });
+            
+            // 模拟实时更新
+            setInterval(() => {
+                const statusElements = document.querySelectorAll('.order-status.status-pending');
+                if (statusElements.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * statusElements.length);
+                    statusElements[randomIndex].className = 'order-status status-completed';
+                    statusElements[randomIndex].textContent = '已完成';
+                    
+                    // 显示同步通知
+                    addLogEntry('自动同步: 更新订单状态', 'info');
+                }
+            }, 10000);
+            
+            // 初始化页面
+            updateOrderList();
         });
     </script>
 </body>

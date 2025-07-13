@@ -15,6 +15,7 @@
             --text-color: rgba(0, 0, 0, 0.85);
             --border-color: #d9d9d9;
             --background-color: #f0f2f5;
+            --maintenance-color: #ff4d4f;
         }
         
         * {
@@ -46,16 +47,24 @@
             font-weight: 700;
             margin-bottom: 1.5rem;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .app-title i {
+            margin-right: 0.5rem;
         }
         
         .maintenance-notice {
-            background-color: var(--error-color);
+            background-color: var(--maintenance-color);
             color: white;
             padding: 0.75rem;
             border-radius: 4px;
             margin-bottom: 1.5rem;
             text-align: center;
             font-weight: 500;
+            display: none;
         }
         
         .panel {
@@ -93,7 +102,6 @@
         }
         
         button {
-            width: 100%;
             padding: 0.75rem;
             background-color: var(--primary-color);
             color: white;
@@ -108,9 +116,18 @@
             background-color: #40a9ff;
         }
         
+        .btn-maintenance {
+            background-color: var(--error-color);
+            color: white;
+        }
+        
+        .btn-maintenance:hover {
+            background-color: #ff7875;
+        }
+        
         .auth-options {
             display: flex;
-            justify-content: space-between;
+            gap: 0.5rem;
             margin-top: 1rem;
         }
         
@@ -124,6 +141,281 @@
             text-decoration: underline;
         }
         
+        /* 邮箱图标样式 */
+        .mail-icon {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        .mail-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mail-icon i {
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .mail-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--error-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        
+        /* 邮箱面板样式 */
+        .mail-panel {
+            position: fixed;
+            bottom: 5rem;
+            right: 2rem;
+            width: 350px;
+            max-height: 500px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 999;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+        
+        .mail-panel.active {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .mail-header {
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mail-header h3 {
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .mail-close {
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .mail-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        
+        .mail-item {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .mail-item:hover {
+            background-color: rgba(24, 144, 255, 0.05);
+        }
+        
+        .mail-item.unread {
+            background-color: rgba(24, 144, 255, 0.1);
+            font-weight: 500;
+        }
+        
+        .mail-item-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .mail-item-time {
+            font-size: 0.75rem;
+            color: #8c8c8c;
+        }
+        
+        .mail-item-preview {
+            font-size: 0.85rem;
+            color: #595959;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .mail-detail {
+            display: none;
+            padding: 1rem;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .mail-detail-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .mail-detail-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .mail-detail-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #8c8c8c;
+        }
+        
+        .mail-detail-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+        
+        .mail-detail-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .mail-back-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: button;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(0, 0, 0, 0.45);
+        }
+        
+        /* 管理员面板样式 */
+        .admin-panel {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+        
+        .admin-panel.active {
+            display: block;
+        }
+        
+        .admin-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .admin-controls button {
+            flex: 1;
+        }
+        
+        .order-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .order-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .order-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .status-approved {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .status-rejected {
+            background-color: var(--error-color);
+            color: white;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-approve {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-reply {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-reject {
+            background-color: var(--error-color);
+            color: white;
+        }
+        
+        /* 管理员入口样式 */
         .admin-access {
             margin-top: 1.5rem;
             text-align: center;
@@ -137,29 +429,98 @@
             border-radius: 4px;
             font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: background-color 0.3s;
+            width: 100%;
         }
         
         .admin-access-btn:hover {
             background-color: rgba(0, 0, 0, 0.75);
         }
         
-        .system-notice {
-            text-align: center;
-            margin-top: 1rem;
-            color: rgba(0, 0, 0, 0.45);
-            font-size: 0.9rem;
+        /* 用户选项样式 */
+        .user-options {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .user-options h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .user-actions button {
+            flex: 1;
+        }
+        
+        .btn-logout {
+            background-color: var(--error-color);
+            color: white;
+        }
+        
+        .btn-logout:hover {
+            background-color: #ff7875;
         }
     </style>
 </head>
 <body>
+    <!-- 邮箱图标 -->
+    <div class="mail-icon" id="mailIcon">
+        <i class="fas fa-envelope"></i>
+        <div class="mail-badge" id="mailBadge">0</div>
+    </div>
+    
+    <!-- 邮箱面板 -->
+    <div class="mail-panel" id="mailPanel">
+        <div class="mail-header">
+            <h3>我的消息</h3>
+            <div class="mail-close" id="mailClose">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        
+        <div class="mail-body" id="mailList">
+            <div class="empty-state">
+                <p>暂无消息</p>
+            </div>
+        </div>
+        
+        <div class="mail-detail" id="mailDetail">
+            <div class="mail-detail-header">
+                <div class="mail-detail-title" id="mailDetailTitle">消息标题</div>
+                <div class="mail-detail-meta">
+                    <span id="mailDetailSender">系统通知</span>
+                    <span id="mailDetailTime">2023-05-15 10:30</span>
+                </div>
+            </div>
+            
+            <div class="mail-detail-content" id="mailDetailContent">
+                消息内容详情...
+            </div>
+            
+            <div class="mail-detail-footer">
+                <button class="mail-back-btn" id="mailBackBtn">返回</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="app-title">
             <i class="fas fa-users"></i>
             WAYNEBING联盟订货系统
         </div>
         
-        <div class="maintenance-notice" id="maintenanceNotice" style="display: none;">
+        <!-- 维护通知 -->
+        <div class="maintenance-notice" id="maintenanceNotice">
             系统正在维护中，预计10:00-12:00，请稍后再试
         </div>
         
@@ -177,17 +538,13 @@
             
             <button id="loginBtn">登录</button>
             
-            <div class="auth-options" id="authOptions">
+            <div class="auth-options">
                 <a href="#" id="showRegister">注册账号</a>
                 <a href="#" id="showForgotPassword">忘记密码</a>
             </div>
             
-            <div class="system-notice">
-                <p>本系统将在每日10点后维护，请注意时间</p>
-            </div>
-            
-            <!-- 维护模式下的管理员入口 -->
-            <div class="admin-access" id="adminAccess" style="display: none;">
+            <!-- 管理员入口 -->
+            <div class="admin-access" id="adminAccess">
                 <button class="admin-access-btn" id="adminAccessBtn">进入后台管理</button>
             </div>
         </div>
@@ -241,14 +598,30 @@
                 <input type="tel" id="regPhone" name="regPhone" placeholder="请输入手机号码" required>
             </div>
             
+            <div class="form-group">
+                <label for="securityQuestion">找回密码问题</label>
+                <select id="securityQuestion" name="securityQuestion" required>
+                    <option value="">请选择一个安全问题</option>
+                    <option value="你奶奶的名字是什么？">你奶奶的名字是什么？</option>
+                    <option value="你爷爷的名字是什么？">你爷爷的名字是什么？</option>
+                    <option value="你2025年过生日你得到了什么最喜欢的礼物？">你2025年过生日你得到了什么最喜欢的礼物？</option>
+                    <option value="你最喜欢什么？">你最喜欢什么？</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="securityAnswer">安全问题答案</label>
+                <input type="text" id="securityAnswer" name="securityAnswer" placeholder="请输入安全问题答案" required>
+            </div>
+            
             <button id="registerBtn">注册</button>
             
             <div class="auth-options">
-                <a href="#" id="backToLogin">已有账号？登录</a>
+                <a href="#" id="showLogin">已有账号？登录</a>
             </div>
         </div>
         
-        <!-- 忘记密码面板 -->
+        <!-- 找回密码面板 -->
         <div class="panel" id="forgotPasswordPanel">
             <div class="form-group">
                 <label for="forgotUsername">用户名</label>
@@ -256,56 +629,303 @@
             </div>
             
             <div class="form-group">
-                <label for="forgotEmail">注册邮箱</label>
-                <input type="email" id="forgotEmail" name="forgotEmail" placeholder="请输入注册时使用的邮箱" required>
+                <label id="forgotQuestionLabel">安全问题</label>
+                <input type="text" id="forgotQuestion" name="forgotQuestion" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="forgotAnswer">安全问题答案</label>
+                <input type="text" id="forgotAnswer" name="forgotAnswer" placeholder="请输入安全问题答案" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="newPassword">新密码</label>
+                <input type="password" id="newPassword" name="newPassword" placeholder="请输入新密码" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmNewPassword">确认新密码</label>
+                <input type="password" id="confirmNewPassword" name="confirmNewPassword" placeholder="请再次输入新密码" required>
             </div>
             
             <button id="resetPasswordBtn">重置密码</button>
             
             <div class="auth-options">
-                <a href="#" id="backToLoginFromForgot">返回登录</a>
+                <a href="#" id="backToLogin">返回登录</a>
+            </div>
+        </div>
+        
+        <!-- 订货面板 -->
+        <div class="panel" id="orderPanel">
+            <form id="orderForm">
+                <div class="form-group">
+                    <label for="studentName">姓名</label>
+                    <input type="text" id="studentName" name="studentName" placeholder="系统已自动填充您的姓名" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact">联系方式</label>
+                    <input type="text" id="contact" name="contact" placeholder="系统已自动填充您的联系方式" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product">产品名称</label>
+                    <input type="text" id="product" name="product" placeholder="请输入需要订购的产品名称" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="budget">预算(元)</label>
+                    <input type="number" id="budget" name="budget" min="0" placeholder="请输入您的预算金额" required>
+                </div>
+                
+                <button type="submit">提交订单</button>
+            </form>
+            
+            <!-- 用户选项 -->
+            <div class="user-options">
+                <h2>管理选项</h2>
+                <div class="user-actions">
+                    <button id="adminBtn">进入后台管理</button>
+                    <button id="logoutBtn" class="btn-logout">退出登录</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 管理员面板 -->
+        <div class="admin-panel" id="adminPanel">
+            <h2>管理员控制台</h2>
+            
+            <div class="admin-controls">
+                <button id="maintenanceToggleBtn" class="btn-maintenance">开启维护模式</button>
+                <button id="refreshOrdersBtn">刷新订单</button>
+                <button id="exportOrdersBtn">导出订单</button>
+                <button id="exitAdminBtn">退出管理</button>
+            </div>
+            
+            <div class="order-list" id="orderList">
+                <div class="empty-state">
+                    <p>暂无订单数据</p>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+      import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+      import { getDatabase, ref, set, get, child, update, remove, push, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDknw2t3NidLp5xXo7EvxBXO4l_SksK2KE",
+        authDomain: "waynebing-38f10.firebaseapp.com",
+        projectId: "waynebing-38f10",
+        storageBucket: "waynebing-38f10.firebasestorage.app",
+        messagingSenderId: "1028289826815",
+        appId: "1:1028289826815:web:eda8c380a2d0df6ba8e1ca"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const database = getDatabase(app);
+      
+      // 全局变量
+      let currentUser = null;
+      let ordersRef = ref(database, 'orders');
+      let usersRef = ref(database, 'users');
+      let mailsRef = ref(database, 'mails');
+      let systemSettingsRef = ref(database, 'systemSettings');
+      
+      // 初始化数据
+      let orders = [];
+      let users = [];
+      let mails = [];
+      let systemSettings = {
+        maintenanceMode: false,
+        maintenanceMessage: "系统正在维护中，预计10:00-12:00，请稍后再试"
+      };
+    </script>
+    
     <script>
-        // 全局变量
-        let currentUser = null;
-        let orders = JSON.parse(localStorage.getItem('orders')) || [];
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-        let systemSettings = JSON.parse(localStorage.getItem('systemSettings')) || {
-            maintenanceMode: false,
-            maintenanceMessage: "系统正在维护中，预计10:00-12:00，请稍后再试"
-        };
-        
         // 页面加载时初始化
         document.addEventListener('DOMContentLoaded', function() {
-            checkLoginStatus();
-            bindEvents();
+            initMailbox();
             checkMaintenanceMode();
+            bindEvents();
+            
+            // Firebase 身份验证状态监听
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    // 用户已登录
+                    console.log("用户已登录:", user.uid);
+                    // 获取用户详细信息
+                    getUserData(user.uid).then(userData => {
+                        if (userData) {
+                            currentUser = userData;
+                            showUserPanel();
+                        } else {
+                            // 用户存在于Auth但不存在于数据库，可能是新注册用户
+                            // 这种情况在注册流程中应该已经处理
+                            signOut(auth).then(() => {
+                                alert('用户数据不存在，请重新登录');
+                                hideAllPanels();
+                                document.getElementById('authPanel').classList.add('active');
+                            });
+                        }
+                    });
+                } else {
+                    // 用户未登录
+                    console.log("用户未登录");
+                    checkLoginStatus(); // 检查本地存储的用户状态(过渡期兼容)
+                }
+            });
         });
-        
-        // 检查维护模式
-        function checkMaintenanceMode() {
-            if (systemSettings.maintenanceMode) {
-                document.getElementById('maintenanceNotice').style.display = 'block';
-                document.getElementById('adminAccess').style.display = 'block';
-            } else {
-                document.getElementById('maintenanceNotice').style.display = 'none';
-                document.getElementById('adminAccess').style.display = 'none';
+
+        // 初始化邮箱系统
+        function initMailbox() {
+            // 使用Firebase实时数据库监听邮件变化
+            onValue(mailsRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    mails = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                    updateUnreadCount();
+                    
+                    // 如果用户已登录，渲染用户邮件
+                    if (currentUser) {
+                        renderUserMails();
+                    }
+                } else {
+                    mails = [];
+                    updateUnreadCount();
+                    
+                    if (currentUser) {
+                        renderUserMails();
+                    }
+                }
+            });
+        }
+
+        // 获取用户数据
+        async function getUserData(uid) {
+            try {
+                const snapshot = await get(child(usersRef, uid));
+                if (snapshot.exists()) {
+                    return snapshot.val();
+                } else {
+                    console.log("没有找到用户数据");
+                    return null;
+                }
+            } catch (error) {
+                console.error("获取用户数据错误:", error);
+                return null;
             }
         }
-        
+
+        // 检查维护模式
+        async function checkMaintenanceMode() {
+            try {
+                const snapshot = await get(systemSettingsRef);
+                if (snapshot.exists()) {
+                    systemSettings = snapshot.val();
+                }
+                
+                if (systemSettings.maintenanceMode) {
+                    document.getElementById('maintenanceNotice').style.display = 'block';
+                    document.getElementById('adminAccess').style.display = 'block';
+                } else {
+                    document.getElementById('maintenanceNotice').style.display = 'none';
+                    document.getElementById('adminAccess').style.display = 'none';
+                }
+            } catch (error) {
+                console.error("获取系统设置错误:", error);
+                // 默认不处于维护模式
+                systemSettings.maintenanceMode = false;
+            }
+        }
+
+        // 检查登录状态(过渡期兼容，最终应完全依赖Firebase Auth)
+        function checkLoginStatus() {
+            const userData = localStorage.getItem('currentUser');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                // 如果Firebase Auth中未登录但本地有用户数据，可能是旧会话
+                // 这种情况下应该让用户重新登录
+                if (!isUserLoggedInInFirebase(currentUser)) {
+                    localStorage.removeItem('currentUser');
+                    currentUser = null;
+                    hideAllPanels();
+                    document.getElementById('authPanel').classList.add('active');
+                    return;
+                }
+                
+                showUserPanel();
+            } else {
+                hideAllPanels();
+                document.getElementById('authPanel').classList.add('active');
+            }
+        }
+
+        // 检查用户是否在Firebase中登录
+        function isUserLoggedInInFirebase(user) {
+            // 这是一个简化的检查，实际上无法直接比较
+            // 在实际应用中，应该完全依赖Firebase Auth的状态
+            return !!user; // 这只是一个占位符，实际实现需要更复杂的逻辑
+        }
+
         // 绑定事件
         function bindEvents() {
+            // 点击邮箱图标
+            document.getElementById('mailIcon').addEventListener('click', function() {
+                document.getElementById('mailPanel').classList.toggle('active');
+            });
+            
+            // 点击关闭按钮
+            document.getElementById('mailClose').addEventListener('click', function() {
+                document.getElementById('mailPanel').classList.remove('active');
+            });
+            
+            // 点击邮件项
+            document.getElementById('mailList').addEventListener('click', function(e) {
+                const mailItem = e.target.closest('.mail-item');
+                if (!mailItem) return;
+                
+                const mailId = mailItem.dataset.id;
+                showMailDetail(mailId);
+            });
+            
+            // 点击返回按钮
+            document.getElementById('mailBackBtn').addEventListener('click', function() {
+                document.getElementById('mailDetail').style.display = 'none';
+                document.getElementById('mailList').style.display = 'block';
+                
+                // 重新渲染列表以更新已读状态
+                renderUserMails();
+                
+                // 更新未读计数
+                updateUnreadCount();
+            });
+            
             // 登录按钮
-            document.getElementById('
-                                                
+            document.getElementById('loginBtn').addEventListener('click', login);
+            
+            // 注册按钮
+            document.getElementById('registerBtn').addEventListener('click', register);
+            
             // 显示注册表单
             document.getElementById('showRegister').addEventListener('click', function(e) {
                 e.preventDefault();
                 hideAllPanels();
                 document.getElementById('registerPanel').classList.add('active');
+            });
+            
+            // 显示登录表单
+            document.getElementById('showLogin').addEventListener('click', function(e) {
+                e.preventDefault();
+                hideAllPanels();
+                document.getElementById('authPanel').classList.add('active');
             });
             
             // 显示忘记密码表单
@@ -322,40 +942,109 @@
                 document.getElementById('authPanel').classList.add('active');
             });
             
-            // 从忘记密码返回登录
-            document.getElementById('backToLoginFromForgot').addEventListener('click', function(e) {
-                e.preventDefault();
-                hideAllPanels();
-                document.getElementById('authPanel').classList.add('active');
+            // 提交订单
+            document.getElementById('orderForm').addEventListener('submit', submitOrder);
+            
+            // 进入后台管理
+            document.getElementById('adminBtn').addEventListener('click', function() {
+                // 现在使用Firebase Auth，不再需要密码验证
+                // 直接检查当前用户是否有管理员权限
+                if (currentUser && currentUser.role === 'admin') {
+                    showAdminPanel();
+                } else {
+                    alert('您没有管理员权限');
+                }
             });
             
-            // 注册按钮
-            document.getElementById('registerBtn').addEventListener('click', register);
-            
-            // 重置密码按钮
-            document.getElementById('resetPasswordBtn').addEventListener('click', resetPassword);
-            
-            // 管理员入口按钮
+            // 管理员入口按钮(过渡期兼容)
             document.getElementById('adminAccessBtn').addEventListener('click', function() {
                 const password = prompt('请输入管理员密码:');
                 if (password === 'waynebing4580') {
-                    currentUser = { role: 'admin' };
-                    alert('已进入管理员模式');
+                    // 在Firebase中设置用户为管理员(仅用于过渡期)
+                    if (currentUser) {
+                        setUserAsAdmin(currentUser.uid).then(() => {
+                            showAdminPanel();
+                        }).catch(error => {
+                            console.error("设置管理员错误:", error);
+                            alert('设置管理员失败');
+                        });
+                    } else {
+                        alert('请先登录');
+                    }
                 } else if (password !== null) {
                     alert('密码错误！');
                 }
             });
-        }
-        
-        // 隐藏所有面板
-        function hideAllPanels() {
-            document.querySelectorAll('.panel').forEach(panel => {
-                panel.classList.remove('active');
+            
+            // 切换维护模式
+            document.getElementById('maintenanceToggleBtn').addEventListener('click', toggleMaintenanceMode);
+            
+            // 刷新订单
+            document.getElementById('refreshOrdersBtn').addEventListener('click', renderAdminOrders);
+            
+            // 导出订单
+            document.getElementById('exportOrdersBtn').addEventListener('click', exportOrders);
+            
+            // 退出管理
+            document.getElementById('exitAdminBtn').addEventListener('click', function() {
+                hideAdminPanel();
+                if (currentUser && currentUser.id) {
+                    showUserPanel();
+                } else {
+                    hideAllPanels();
+                    document.getElementById('authPanel').classList.add('active');
+                }
+            });
+            
+            // 重置密码
+            document.getElementById('resetPasswordBtn').addEventListener('click', resetPassword);
+            
+            // 退出登录
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                signOut(auth).then(() => {
+                    localStorage.removeItem('currentUser');
+                    currentUser = null;
+                    hideAllPanels();
+                    document.getElementById('authPanel').classList.add('active');
+                    document.getElementById('mailIcon').style.display = 'none';
+                    alert('已成功退出登录');
+                }).catch(error => {
+                    console.error("退出登录错误:", error);
+                    alert('退出登录失败');
+                });
             });
         }
-        
+
+        // 检查用户是否是管理员
+        async function checkIfUserIsAdmin(uid) {
+            try {
+                const snapshot = await get(child(usersRef, uid));
+                if (snapshot.exists()) {
+                    const user = snapshot.val();
+                    return user.role === 'admin';
+                }
+                return false;
+            } catch (error) {
+                console.error("检查管理员权限错误:", error);
+                return false;
+            }
+        }
+
+        // 设置用户为管理员(仅用于过渡期)
+        async function setUserAsAdmin(uid) {
+            try {
+                // 在实际应用中，管理员权限应该通过Firebase Auth的自定义声明或单独的权限系统管理
+                // 这里只是简单地将用户角色设置为admin
+                await update(child(usersRef, uid), { role: 'admin' });
+                return true;
+            } catch (error) {
+                console.error("设置管理员错误:", error);
+                throw error;
+            }
+        }
+
         // 登录函数
-        function login() {
+        async function login() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
@@ -364,19 +1053,43 @@
                 return;
             }
             
-            const user = users.find(u => u.username === username && u.password === password);
-            
-            if (user) {
-                currentUser = user;
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                alert('登录成功！');
-            } else {
-                alert('用户名或密码错误');
+            try {
+                // 使用Firebase Email/Password认证
+                const userCredential = await signInWithEmailAndPassword(auth, username, password);
+                const user = userCredential.user;
+                
+                // 获取用户详细信息
+                const userData = await getUserData(user.uid);
+                if (userData) {
+                    currentUser = userData;
+                    showUserPanel();
+                } else {
+                    // 用户存在于Auth但不存在于数据库，可能是新注册用户(不应该发生)
+                    await signOut(auth);
+                    alert('用户数据不存在，请重新登录');
+                    hideAllPanels();
+                    document.getElementById('authPanel').classList.add('active');
+                }
+            } catch (error) {
+                console.error("登录错误:", error);
+                alert('登录失败: ' + getErrorMessage(error.code));
             }
         }
-        
-        // 注册函数
-        function register() {
+
+        // 获取错误消息
+        function getErrorMessage(code) {
+            const errorMessages = {
+                'auth/user-not-found': '用户名不存在',
+                'auth/wrong-password': '密码错误',
+                'auth/invalid-email': '无效的用户名',
+                'auth/user-disabled': '用户已被禁用',
+                'auth/too-many-requests': '尝试次数过多，请稍后再试'
+            };
+            return errorMessages[code] || '登录失败，请检查用户名和密码';
+        }
+
+                // 注册函数
+        async function register() {
             const username = document.getElementById('regUsername').value;
             const password = document.getElementById('regPassword').value;
             const confirmPassword = document.getElementById('regConfirmPassword').value;
@@ -384,8 +1097,11 @@
             const className = document.getElementById('regClass').value;
             const school = document.getElementById('regSchool').value;
             const phone = document.getElementById('regPhone').value;
+            const securityQuestion = document.getElementById('securityQuestion').value;
+            const securityAnswer = document.getElementById('securityAnswer').value;
             
-            if (!username || !password || !confirmPassword || !name || !className || !school || !phone) {
+            // 表单验证
+            if (!username || !password || !confirmPassword || !name || !className || !school || !phone || !securityQuestion || !securityAnswer) {
                 alert('请填写所有必填字段');
                 return;
             }
@@ -395,61 +1111,547 @@
                 return;
             }
             
-            if (users.some(u => u.username === username)) {
-                alert('用户名已存在');
-                return;
+            try {
+                // 检查用户名是否已存在
+                const usersSnapshot = await get(usersRef);
+                if (usersSnapshot.exists()) {
+                    const allUsers = usersSnapshot.val();
+                    if (Object.values(allUsers).some(user => user.username === username)) {
+                        alert('用户名已存在');
+                        return;
+                    }
+                }
+                
+                // 使用Firebase创建用户
+                const userCredential = await createUserWithEmailAndPassword(auth, username, password);
+                const user = userCredential.user;
+                
+                // 创建用户详细信息
+                const newUser = {
+                    id: user.uid,
+                    username,
+                    password: password, // 注意：实际应用中不应明文存储密码，这里仅作演示
+                    name,
+                    className,
+                    school,
+                    phone,
+                    securityQuestion,
+                    securityAnswer,
+                    role: 'user',
+                    registerTime: new Date().toLocaleString()
+                };
+                
+                // 将用户信息保存到数据库
+                await set(child(usersRef, user.uid), newUser);
+                
+                // 为新用户创建欢迎邮件
+                const welcomeMail = {
+                    id: Date.now().toString(),
+                    userId: user.uid,
+                    title: '欢迎加入WAYNEBING联盟',
+                    content: `尊敬的${name}同学，欢迎您加入WAYNEBING联盟订货系统。客服可能会在一周内回复您的订单，请留意消息通知。`,
+                    sender: '系统管理员',
+                    time: new Date().toLocaleString(),
+                    read: false,
+                    type: 'welcome'
+                };
+                
+                await push(mailsRef, welcomeMail);
+                
+                // 登录新创建的用户
+                currentUser = newUser;
+                showUserPanel();
+                
+                alert('注册成功！已自动登录');
+                
+                // 切换到订单面板
+                hideAllPanels();
+                document.getElementById('orderPanel').classList.add('active');
+                document.getElementById('studentName').value = currentUser.name;
+                document.getElementById('contact').value = currentUser.phone;
+                
+            } catch (error) {
+                console.error("注册错误:", error);
+                alert('注册失败: ' + getErrorMessage(error.code));
             }
-            
-            const newUser = {
-                id: Date.now(),
-                username,
-                password,
-                name,
-                className,
-                school,
-                phone,
-                registerTime: new Date().toLocaleString()
+        }
+
+        // 获取错误消息
+        function getErrorMessage(code) {
+            const errorMessages = {
+                'auth/email-already-in-use': '用户名已存在',
+                'auth/invalid-email': '无效的用户名',
+                'auth/operation-not-allowed': '操作不被允许',
+                'auth/weak-password': '密码强度不足'
             };
-            
-            users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));
-            
-            alert('注册成功！请登录');
-            hideAllPanels();
-            document.getElementById('authPanel').classList.add('active');
-            document.getElementById('username').value = username;
-            document.getElementById('password').value = '';
+            return errorMessages[code] || '操作失败，请稍后再试';
         }
-        
+
         // 重置密码
-        function resetPassword() {
+        async function resetPassword() {
             const username = document.getElementById('forgotUsername').value;
-            const email = document.getElementById('forgotEmail').value;
+            const answer = document.getElementById('forgotAnswer').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
             
-            if (!username || !email) {
-                alert('请填写用户名和注册邮箱');
+            if (!username || !answer || !newPassword || !confirmNewPassword) {
+                alert('请填写所有必填字段');
                 return;
             }
             
-            const user = users.find(u => u.username === username);
-            
-            if (!user) {
-                alert('用户名不存在');
+            if (newPassword !== confirmNewPassword) {
+                alert('两次输入的密码不一致');
                 return;
             }
             
-            alert('密码重置链接已发送到您的邮箱');
-            hideAllPanels();
-            document.getElementById('authPanel').classList.add('active');
+            try {
+                // 首先验证用户和安全问题答案
+                // 注意：Firebase Auth不直接支持安全问题，所以我们需要从数据库查询
+                const usersSnapshot = await get(usersRef);
+                if (!usersSnapshot.exists()) {
+                    alert('系统错误：无法获取用户数据');
+                    return;
+                }
+                
+                const allUsers = usersSnapshot.val();
+                const user = Object.values(allUsers).find(u => u.username === username);
+                
+                if (!user) {
+                    alert('用户名不存在');
+                    return;
+                }
+                
+                if (answer !== user.securityAnswer) {
+                    alert('安全问题答案错误');
+                    return;
+                }
+                
+                // 使用Firebase发送密码重置邮件
+                await sendPasswordResetEmail(auth, username);
+                
+                // 同时更新数据库中的密码(不推荐的做法，仅作演示)
+                // 实际应用中应该只使用Firebase Auth的密码重置功能
+                await update(child(usersRef, user.id), { password: newPassword });
+                
+                alert('密码重置链接已发送到您的邮箱，请查收并重置密码。\n\n(演示模式下同时更新了数据库密码)');
+                
+                // 切换到登录面板
+                hideAllPanels();
+                document.getElementById('authPanel').classList.add('active');
+                document.getElementById('username').value = username;
+                document.getElementById('password').value = '';
+                
+            } catch (error) {
+                console.error("重置密码错误:", error);
+                alert('重置密码失败: ' + getResetPasswordErrorMessage(error.code));
+            }
         }
-        
-        // 检查登录状态
-        function checkLoginStatus() {
-            const userData = localStorage.getItem('currentUser');
-            if (userData) {
-                currentUser = JSON.parse(userData);
+
+        // 获取重置密码错误消息
+        function getResetPasswordErrorMessage(code) {
+            const errorMessages = {
+                'auth/user-not-found': '用户名不存在',
+                'auth/invalid-email': '无效的用户名'
+            };
+            return errorMessages[code] || '重置密码失败，请稍后再试';
+        }
+
+        // 提交订单函数
+        async function submitOrder(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                alert('请先登录');
+                return;
             }
+            
+            const product = document.getElementById('product').value;
+            const budget = document.getElementById('budget').value;
+            
+            if (!product || !budget) {
+                alert('请填写所有必填字段');
+                return;
+            }
+            
+            try {
+                // 创建新订单
+                const newOrder = {
+                    id: Date.now().toString(),
+                    orderId: `WB${Date.now()}${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
+                    userId: currentUser.id,
+                    userName: currentUser.name,
+                    className: currentUser.className,
+                    school: currentUser.school,
+                    contact: currentUser.phone,
+                    product: product,
+                    budget: budget,
+                    status: 'pending',
+                    reply: '',
+                    timestamp: new Date().toLocaleString()
+                };
+                
+                // 将订单保存到数据库
+                await push(ordersRef, newOrder);
+                
+                // 创建订单确认邮件
+                const orderMail = {
+                    id: Date.now().toString(),
+                    userId: currentUser.id,
+                    title: `订单提交成功 #${newOrder.orderId}`,
+                    content: `您的订单 #${newOrder.orderId} 已成功提交，产品：${newOrder.product}，预算：${newOrder.budget}元。客服可能会在一周内回复您的订单，请留意消息通知。`,
+                    sender: '系统通知',
+                    time: new Date().toLocaleString(),
+                    read: false,
+                    type: 'order'
+                };
+                
+                await push(mailsRef, orderMail);
+                
+                alert('订单提交成功！');
+                document.getElementById('orderForm').reset();
+                
+                // 更新邮件列表和未读计数
+                renderUserMails();
+                updateUnreadCount();
+                
+            } catch (error) {
+                console.error("提交订单错误:", error);
+                alert('提交订单失败: ' + error.message);
+            }
+        }
+
+        // 显示用户面板
+        function showUserPanel() {
+            hideAllPanels();
+            document.getElementById('orderPanel').classList.add('active');
+            document.getElementById('mailIcon').style.display = 'flex';
+            
+            // 填充用户信息
+            document.getElementById('studentName').value = currentUser.name;
+            document.getElementById('contact').value = currentUser.phone;
+            
+            // 渲染用户邮件
+            renderUserMails();
+        }
+
+        // 显示管理员面板
+        function showAdminPanel() {
+            hideAllPanels();
+            document.getElementById('adminPanel').classList.add('active');
+            
+            // 更新维护模式按钮文本
+            document.getElementById('maintenanceToggleBtn').textContent = 
+                systemSettings.maintenanceMode ? '关闭维护模式' : '开启维护模式';
+            
+            renderAdminOrders();
+        }
+
+        // 隐藏管理员面板
+        function hideAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('active');
+        }
+
+        // 隐藏所有面板
+        function hideAllPanels() {
+            document.querySelectorAll('.panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+        }
+
+        // 渲染用户邮件
+        function renderUserMails() {
+            const mailList = document.getElementById('mailList');
+            mailList.innerHTML = '';
+            
+            // 获取当前用户的邮件(包括系统通知)
+            // 使用Firebase实时数据库查询当前用户的邮件
+            // 注意：这里简化了查询，实际应用中可能需要更复杂的查询逻辑
+            
+            // 由于Firebase实时数据库不支持直接客户端筛选，我们获取所有邮件然后在客户端筛选
+            // 在生产环境中，应该使用Firebase的查询功能或云函数来实现更高效的筛选
+            
+            // 临时解决方案：获取所有邮件后在客户端筛选
+            onValue(mailsRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const allMails = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                    const userMails = allMails.filter(mail => 
+                        mail.userId === null || mail.userId === currentUser.id
+                    );
+                    
+                    if (userMails.length === 0) {
+                        mailList.innerHTML = '<div class="empty-state"><p>暂无消息</p></div>';
+                        return;
+                    }
+                    
+                    // 按时间降序排序
+                    userMails.sort((a, b) => new Date(b.time) - new Date(a.time));
+                    
+                    userMails.forEach(mail => {
+                        const mailItem = document.createElement('div');
+                        mailItem.className = `mail-item ${mail.read ? '' : 'unread'}`;
+                        mailItem.dataset.id = mail.id;
+                        
+                        mailItem.innerHTML = `
+                            <div class="mail-item-title">
+                                <span>${mail.title}</span>
+                                <span class="mail-item-time">${mail.time}</span>
+                            </div>
+                            <div class="mail-item-preview">${mail.content.substring(0, 30)}...</div>
+                        `;
+                        
+                        mailList.appendChild(mailItem);
+                    });
+                } else {
+                    mailList.innerHTML = '<div class="empty-state"><p>暂无消息</p></div>';
+                }
+            });
+        }
+
+        // 显示邮件详情
+        function showMailDetail(mailId) {
+            // 由于Firebase实时数据库是NoSQL，我们需要获取特定ID的邮件
+            // 这里使用一次性的get请求来获取特定邮件
+            get(child(mailsRef, mailId)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const mail = snapshot.val();
+                    
+                    // 标记为已读
+                    if (!mail.read) {
+                        update(child(mailsRef, mailId), { read: true });
+                    }
+                    
+                    // 更新UI
+                    document.getElementById('mailDetailTitle').textContent = mail.title;
+                    document.getElementById('mailDetailSender').textContent = mail.sender;
+                    document.getElementById('mailDetailTime').textContent = mail.time;
+                    document.getElementById('mailDetailContent').textContent = mail.content;
+                    
+                    // 切换视图
+                    document.getElementById('mailList').style.display = 'none';
+                    document.getElementById('mailDetail').style.display = 'flex';
+                } else {
+                    alert('邮件不存在');
+                }
+            }).catch((error) => {
+                console.error("获取邮件错误:", error);
+                alert('获取邮件失败');
+            });
+        }
+
+        // 更新未读计数
+        function updateUnreadCount() {
+            // 获取当前用户的所有未读邮件
+            onValue(mailsRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const allMails = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                    const unreadCount = allMails.filter(mail => 
+                        (mail.userId === null || mail.userId === currentUser?.id) && !mail.read
+                    ).length;
+                    document.getElementById('mailBadge').textContent = unreadCount;
+                } else {
+                    document.getElementById('mailBadge').textContent = 0;
+                }
+            });
+        }
+
+        // 渲染管理员订单列表
+        function renderAdminOrders() {
+            // 获取所有订单
+            onValue(ordersRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    orders = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                    
+                    if (orders.length === 0) {
+                        document.getElementById('orderList').innerHTML = '<div class="empty-state"><p>暂无订单数据</p></div>';
+                        return;
+                    }
+                    
+                    // 按时间降序排序
+                    const sortedOrders = [...orders].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
+                    let orderListHTML = '';
+                    sortedOrders.forEach(order => {
+                        const statusClass = {
+                            'pending': 'status-pending',
+                            'approved': 'status-approved',
+                            'rejected': 'status-rejected'
+                        }[order.status] || '';
+                        
+                        orderListHTML += `
+                            <div class="order-card">
+                                <h3>订单 #${order.orderId}</h3>
+                                <p><strong>用户:</strong> ${order.userName} (${order.className})</p>
+                                <p><strong>学校:</strong> ${order.school}</p>
+                                <p><strong>联系方式:</strong> ${order.contact}</p>
+                                <p><strong>产品名称:</strong> ${order.product}</p>
+                                <p><strong>预算:</strong> ${order.budget}元</p>
+                                <p><strong>提交时间:</strong> ${order.timestamp}</p>
+                                <p><strong>状态:</strong> <span class="status ${statusClass}">${getStatusText(order.status)}</span></p>
+                                ${order.reply ? `<p><strong>回复:</strong> ${order.reply}</p>` : ''}
+                                <div class="action-buttons">
+                                    <button class="btn-approve" data-id="${order.id}">完成</button>
+                                    <button class="btn-reply" data-id="${order.id}">回复</button>
+                                    <button class="btn-reject" data-id="${order.id}">打回</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    document.getElementById('orderList').innerHTML = orderListHTML;
+                    
+                    // 绑定订单操作按钮
+                    document.querySelectorAll('.btn-approve').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            updateOrderStatus(this.dataset.id, 'approved');
+                        });
+                    });
+                    
+                    document.querySelectorAll('.btn-reply').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            addOrderReply(this.dataset.id);
+                        });
+                    });
+                    
+                    document.querySelectorAll('.btn-reject').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            updateOrderStatus(this.dataset.id, 'rejected');
+                        });
+                    });
+                } else {
+                    document.getElementById('orderList').innerHTML = '<div class="empty-state"><p>暂无订单数据</p></div>';
+                }
+            });
+        }
+
+        // 更新订单状态
+        async function updateOrderStatus(orderId, status) {
+            try {
+                // 更新订单状态
+                await update(child(ordersRef, orderId), { status });
+                
+                // 发送状态更新邮件
+                // 首先获取订单信息以获取用户ID
+                const orderSnapshot = await get(child(ordersRef, orderId));
+                if (orderSnapshot.exists()) {
+                    const order = orderSnapshot.val();
+                    if (order.userId) {
+                        const mail = {
+                            id: Date.now().toString(),
+                            userId: order.userId,
+                            title: `订单状态更新 #${order.orderId}`,
+                            content: `您的订单 #${order.orderId} 状态已更新为"${getStatusText(status)}"。${status === 'approved' ? '订单已完成，感谢您的支持！' : ''}`,
+                            sender: '系统通知',
+                            time: new Date().toLocaleString(),
+                            read: false,
+                            type: 'order'
+                        };
+                        
+                        await push(mailsRef, mail);
+                    }
+                }
+                
+                renderAdminOrders();
+            } catch (error) {
+                console.error("更新订单状态错误:", error);
+                alert('更新订单状态失败: ' + error.message);
+            }
+        }
+
+        // 添加订单回复
+        async function addOrderReply(orderId) {
+            const reply = prompt('请输入回复内容:');
+            if (reply !== null) {
+                try {
+                    // 获取订单信息以获取用户ID
+                    const orderSnapshot = await get(child(ordersRef, orderId));
+                    if (orderSnapshot.exists()) {
+                        const order = orderSnapshot.val();
+                        if (order.userId) {
+                            // 更新订单回复
+                            await update(child(ordersRef, orderId), { reply });
+                            
+                            // 发送回复邮件
+                            const mail = {
+                                id: Date.now().toString(),
+                                userId: order.userId,
+                                title: `订单回复 #${order.orderId}`,
+                                content: `您的订单 #${order.orderId} 收到回复：\n\n${reply}`,
+                                sender: '客服',
+                                time: new Date().toLocaleString(),
+                                read: false,
+                                type: 'reply'
+                            };
+                            
+                            await push(mailsRef, mail);
+                        }
+                    }
+                    
+                    renderAdminOrders();
+                } catch (error) {
+                    console.error("添加订单回复错误:", error);
+                    alert('添加订单回复失败: ' + error.message);
+                }
+            }
+        }
+
+        // 导出订单数据
+        function exportOrders() {
+            // 获取所有订单数据
+            get(ordersRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const ordersData = snapshot.val();
+                    const ordersArray = Object.keys(ordersData).map(key => ({ id: key, ...ordersData[key] }));
+                    
+                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ordersArray, null, 2));
+                    const downloadAnchorNode = document.createElement('a');
+                    downloadAnchorNode.setAttribute("href", dataStr);
+                    downloadAnchorNode.setAttribute("download", "orders.json");
+                    document.body.appendChild(downloadAnchorNode);
+                    downloadAnchorNode.click();
+                    downloadAnchorNode.remove();
+                    alert('订单数据已导出');
+                } else {
+                    alert('没有订单数据可导出');
+                }
+            }).catch((error) => {
+                console.error("导出订单错误:", error);
+                alert('导出订单失败: ' + error.message);
+            });
+        }
+
+        // 切换维护模式
+        async function toggleMaintenanceMode() {
+            try {
+                // 切换维护模式状态
+                systemSettings.maintenanceMode = !systemSettings.maintenanceMode;
+                
+                // 更新系统设置
+                await set(systemSettingsRef, systemSettings);
+                
+                document.getElementById('maintenanceToggleBtn').textContent = 
+                    systemSettings.maintenanceMode ? '关闭维护模式' : '开启维护模式';
+                
+                checkMaintenanceMode();
+                alert(`维护模式已${systemSettings.maintenanceMode ? '开启' : '关闭'}`);
+            } catch (error) {
+                console.error("切换维护模式错误:", error);
+                alert('切换维护模式失败: ' + error.message);
+            }
+        }
+
+        // 获取状态文本
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': '待处理',
+                'approved': '已完成',
+                'rejected': '已打回'
+            };
+            return statusMap[status] || status;
         }
     </script>
 </body>
 </html>
+
